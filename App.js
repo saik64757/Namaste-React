@@ -1,14 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import Header from "./src/Components/Header/Header";
+import Body from "./src/Components/Body/Body";
 
-//
-// const heading = React.createElement(
-//   "h1",
-//   {},
-//   "Hello World from React Namaste React 🚀🆗"
-// );
-
-let heading = <h1> "Hello World from React Namaste React 🚀🆗"</h1>;
+function App() {
+  return (
+    <>
+      <Header />
+      <Body />
+    </>
+  );
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(heading);
+root.render(<App />);
