@@ -1,17 +1,27 @@
 import React from "react";
 import styles from "./Header.module.css";
 import logo from "../../../Assets/Reslogo.png";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
     <>
       <div className={styles.HeaderContainer}>
-        <img placeholder="Logo" src={logo} className={styles.logo} />
+        <Link to="/">
+          <img placeholder="Logo" src={logo} className={styles.logo} />
+        </Link>
         <div>
-          <ul className={styles.liitems} onClick={() => console.log("Clicked")}>
-            <li>Home</li>
-            <li>About Us</li>
-            <li>Contact Us</li>
+          <ul className={styles.liitems}>
+            <Link to="/">
+              <li>Home</li>
+            </Link>
+
+            <Link to="/about">
+              <li>About Us</li>
+            </Link>
+            <Link to="/contact">
+              <li>Contact Us</li>
+            </Link>
             <li>Cart</li>
           </ul>
         </div>

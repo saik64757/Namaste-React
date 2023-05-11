@@ -2,11 +2,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import styles from "./Body.module.css";
 import RestrauntCard from "./../RestrauntCard/RestrauntCard";
 import { datares } from "../../../utils/apicalls";
+import CardShimmer from "../CardShimmer/CardShimmer";
+import { Link } from "react-router-dom";
 
 function Body() {
   const [resData, setresData] = useState([]);
   const [SearchText, setSearchText] = useState("");
   const [allResData, setallResData] = useState([]);
+  // const [loading, setloading] = useState(false);
 
   const Debounce = (func) => {
     let timer;
@@ -34,15 +37,17 @@ function Body() {
 
   useEffect(() => {
     (async () => {
+      // setloading(true);
       const data = await datares();
       setresData(
-        data.data.data.success.cards[5].gridWidget.gridElements.infoWithStyle
-          .restaurants
+        data?.data.data.success.cards[4]?.gridWidget.gridElements.infoWithStyle
+          .restaurants ?? "No data"
       );
       setallResData(
-        data.data.data.success.cards[5].gridWidget.gridElements.infoWithStyle
-          .restaurants
+        data.data.data.success.cards[4]?.gridWidget.gridElements.infoWithStyle
+          .restaurants ?? "No data"
       );
+      // setloading(false);
     })();
     return () => {
       datares();
@@ -72,23 +77,36 @@ function Body() {
           <button className={styles.buttonfilter}>Search</button>
         </span>
       </span>
-      <div className={styles.bodyContainer}>
-        {resData ? (
-          resData.map((restraunt) => (
-            <RestrauntCard
-              key={restraunt.info.id}
-              imageid={restraunt.info.cloudinaryImageId}
-              resTrauntName={restraunt.info.name}
-              cuisines={restraunt.info.cuisines}
-              avgRating={restraunt.info.avgRating}
-              costForTwo={restraunt.info.costForTwo}
-              deliveryTime={restraunt.info.sla.deliveryTime}
-            />
-          ))
-        ) : (
-          <></>
-        )}
-      </div>
+      {allResData.length === 0 ? (
+        <div className={styles.bodyContainer}>
+          <CardShimmer />
+        </div>
+      ) : (
+        <div className={styles.bodyContainer}>
+          {resData.length !== 0 ? (
+            resData.map((restraunt) => (
+              <Link
+                key={restraunt.info.id}
+                to={"/restraunt/" + restraunt.info.id}
+              >
+                <RestrauntCard
+                  imageid={restraunt.info.cloudinaryImageId}
+                  resTrauntName={restraunt.info.name}
+                  cuisines={restraunt.info.cuisines}
+                  avgRating={restraunt.info.avgRating}
+                  costForTwo={restraunt.info.costForTwo}
+                  deliveryTime={restraunt.info.sla.deliveryTime}
+                />
+              </Link>
+            ))
+          ) : (
+            <>
+              {" "}
+              <h1>No Restraunt found</h1>{" "}
+            </>
+          )}
+        </div>
+      )}
     </>
   );
 }
